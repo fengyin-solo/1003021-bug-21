@@ -14,6 +14,8 @@ class Store:
         self._tables: dict[str, list[dict[str, Any]]] = {
             name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
         }
+        self._configs: dict[str, dict[str, Any]] = {}
+        self._histories: dict[str, list[dict[str, Any]]] = {}
 
     def module_names(self) -> list[str]:
         return sorted(self._tables)
@@ -26,6 +28,14 @@ class Store:
             if int(row.get("id", 0)) == entry_id:
                 return row
         return None
+
+    def config(self, module: str) -> dict[str, Any]:
+        """模块级配置（如判定阈值）：真实项目里对应一张配置表。"""
+        return self._configs.setdefault(module, {})
+
+    def history(self, module: str) -> list[dict[str, Any]]:
+        """模块级判定历史：只追加、不回改，历史结论保留当时那一版。"""
+        return self._histories.setdefault(module, [])
 
     def overview(self) -> dict[str, object]:
         modules: list[dict[str, object]] = []

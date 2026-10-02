@@ -28,6 +28,12 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class ThresholdPayload(BaseModel):
+    """调整判定阈值时提交的数值。"""
+
+    value: float
+
+
 
 class SiteEntry(BaseModel):
     """基站明细结构。"""
